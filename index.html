@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pendaftaran Yudisium & Wisuda</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-6">Form Pendaftaran</h1>
+    
+    <form id="formPendaftaran" class="space-y-4">
+      <input type="text" id="nama" placeholder="Nama Lengkap" required class="w-full border rounded-lg px-3 py-2" />
+      <input type="text" id="nim" placeholder="NIM" required class="w-full border rounded-lg px-3 py-2" />
+      
+      <select id="prodi" required class="w-full border rounded-lg px-3 py-2">
+        <option value="">Pilih Program Studi</option>
+        <option value="Informatika">Informatika</option>
+        <option value="Sistem Informasi">Sistem Informasi</option>
+        <option value="Teknik Elektro">Teknik Elektro</option>
+      </select>
+
+      <div>
+        <label><input type="radio" name="jenis" value="Yudisium" required /> Yudisium</label><br />
+        <label><input type="radio" name="jenis" value="Wisuda" required /> Wisuda</label>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg">Kirim</button>
+    </form>
+
+    <p id="successMsg" class="text-green-600 mt-4 hidden text-center">✅ Pendaftaran berhasil!</p>
+    <p id="errorMsg" class="text-red-600 mt-4 hidden text-center">❌ Gagal mengirim data.</p>
+  </div>
+
+  <script>
+    const form = document.getElementById('formPendaftaran');
+    const successMsg = document.getElementById('successMsg');
+    const errorMsg = document.getElementById('errorMsg');
+
+    // GANTI URL DI BAWAH DENGAN URL GOOGLE APPS SCRIPT-MU
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxCYtv_j5S46M4rYfduxDEB6OxAsuVFWkfJJJgvD0AouBesoXqU_5Pkv4Cy1Zz6UOdB/exec';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        nama: document.getElementById('nama').value,
+        nim: document.getElementById('nim').value,
+        prodi: document.getElementById('prodi').value,
+        jenis: document.querySelector('input[name="jenis"]:checked').value
+      };
+
+      try {
+        const res = await fetch(scriptURL, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (res.ok) {
+          successMsg.classList.remove('hidden');
+          form.reset();
+        } else {
+          throw new Error();
+        }
+      } catch {
+        errorMsg.classList.remove('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>
