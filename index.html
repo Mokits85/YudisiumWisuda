@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pendaftaran Yudisium & Wisuda</title>
+  <title>Form Pendaftaran Yudisium & Wisuda</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
 
   <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
     <h1 class="text-2xl font-bold text-center mb-6">Form Pendaftaran</h1>
-    
+
     <form id="formPendaftaran" class="space-y-4">
       <input type="text" id="nama" placeholder="Nama Lengkap" required class="w-full border rounded-lg px-3 py-2" />
       <input type="text" id="nim" placeholder="NIM" required class="w-full border rounded-lg px-3 py-2" />
-      
+
       <select id="prodi" required class="w-full border rounded-lg px-3 py-2">
         <option value="">Pilih Program Studi</option>
         <option value="Informatika">Informatika</option>
@@ -39,7 +39,6 @@
     const successMsg = document.getElementById('successMsg');
     const errorMsg = document.getElementById('errorMsg');
 
-    // GANTI URL DI BAWAH DENGAN URL GOOGLE APPS SCRIPT-MU
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxCYtv_j5S46M4rYfduxDEB6OxAsuVFWkfJJJgvD0AouBesoXqU_5Pkv4Cy1Zz6UOdB/exec';
 
     form.addEventListener('submit', async (e) => {
@@ -59,14 +58,19 @@
           headers: { 'Content-Type': 'application/json' }
         });
 
-        if (res.ok) {
+        const result = await res.json();
+
+        if (result.success) {
           successMsg.classList.remove('hidden');
+          errorMsg.classList.add('hidden');
           form.reset();
         } else {
           throw new Error();
         }
-      } catch {
+      } catch (err) {
+        successMsg.classList.add('hidden');
         errorMsg.classList.remove('hidden');
+        console.error(err);
       }
     });
   </script>
